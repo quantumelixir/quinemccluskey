@@ -1,0 +1,51 @@
+***********
+The Problem
+***********
+
+Boolean circuit minimization is the problem of obtaining the smallest logic circuit (Boolean formula) that represents a given Boolean function or truth table. The problem with having a complicated circuit (i.e. one with many elements, such as logical gates) is that each element takes up physical space in its implementation and costs time and money to produce in itself.
+
+
+*****************************
+Introduction to the Algorithm
+*****************************
+
+The Quine-McCluskey Algorithm is a method used for the minimization of boolean functions. It is functionally identical to Karnaguh mapping, but the tabular form makes it more efficient for use in computer algorithms, and it also gives a deterministic way to check that the minimal form of a Boolean function has been reached. It is sometimes referred to as the tabulation method or the method of prime implicants.
+
+Unlike modern heuristic optimization algorithms like Espresso, the Quine-McCluskey algorithm guarantees an optimal solution in terms of complexity of the final logic expression produced. However the time complexity of the Algorithm is exponential in the number of minterms and thus is prohibitive for use in minimizing large truth tables containing significant number of minterms.
+
+
+***********
+Terminology
+***********
+
+In Boolean logic, an implicant is a "covering" (sum term or product term) of one or more minterms in a sum of products (or maxterms in a product of sums) of a boolean function. A prime implicant of a function is an implicant that cannot be covered by a more general (more reduced - meaning with fewer literals) implicant. W.V. Quine defined a prime implicant of F to be an implicant that is minimal - that is, if the removal of any literal from P results in a non-implicant for F. Essential prime implicants are prime implicants that cover an output of the function that no combination of other prime implicants is able to cover.
+
+
+*****************************
+The Quine-McCluskey Algorithm
+*****************************
+
+Input
+The inputs to the algorithm  are:
+Number of input variables
+Minterms
+Don't care terms
+
+
+*********
+Procedure
+*********
+
+The procedure involves primarily two steps:
+1.Finding all the prime implicants of the function.
+2.Use the prime implicants found, to construct a prime implicant chart and find the essential prime implicants as well as the prime implicants that are necessary to cover the function.
+
+In detail,
+1.First, the minterms (and don't cares) of the function are classified into groups depending on the number of 1s that they contain so that all minterms in a group have the same number of ones.
+2.The groups are arranged in an increasing order of the number of 1s that the minterms they contain possess. Let there be n groups in total.
+3.Each minterm in ith group (i runs from 1 to n-1) is compared with every minterm in the i + 1th group to determine if they are logically adjacent. i.e. If they differ by only by a single bit. If so, they are combined with the differing bit replaced by a '-' and added to a new group. (Minterms that are not involved in any combination are also added to the new group)
+4.The previous operation is repeated for the new set of minterms in the new group till no more combinations are possible. Every minterm in this final group are Prime Implicants.
+5.A Prime Implicant Chart is constructed in which there is one column for each minterm (don't cares are not listed) and one row for each prime implicant. A 1 in the chart in the ith row and jth column indicates that the ith prime implicant covers the jth minterm in the chart.
+6.Then all the Essential Prime Implicants (i.e. Prime Implicants that cover at least one minterm not covered by any other prime implicant) are located. By definition they must be present as part of the optimal solution.
+7.If the essential prime implicants themselves do not cover all the minterms then a minimal number or extraneous or covering prime implicants are chosen so that all minterms are accounted for. This is done in a greedy manner (i.e. Prime implicants having the largest row-sums in the chart are chosen before others, till all minterms are covered)
+8.The final selected set of Prime Implicants (Essential Prime Implicants plus the Covering Prime Implicants, if any) form the final minimized logic expression.
